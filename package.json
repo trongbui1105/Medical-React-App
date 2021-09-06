@@ -7,11 +7,13 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "adminbsb-materialdesign": "^1.0.7",
+    "axios": "^0.21.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-google-font-loader": "^1.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "reactjs-localstorage": "^1.0.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
