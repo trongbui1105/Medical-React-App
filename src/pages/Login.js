@@ -112,7 +112,6 @@ class Login extends React.Component {
             
             <div class="login-box">
                 <div class="logo">
-                    {/* eslint-disable-next-line */}
                     <a href="javascript:void(0);">Medical Store Management System</a>
                 </div>
                 <div class="card">
