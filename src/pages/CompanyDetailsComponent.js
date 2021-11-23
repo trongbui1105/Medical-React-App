@@ -20,7 +20,8 @@ class CompanyDetailsComponent extends React.Component {
     address: "",
     contact_no: "",
     email: "",
-    description: ""
+    description: "",
+    dataLoaded: false,
   };
 
   async formSubmit(event) {
@@ -56,12 +57,13 @@ class CompanyDetailsComponent extends React.Component {
     );
     console.log(companyData);
     this.setState({ companyBank: companyData.data.data.company_bank });
-    this.setState({name: companyData.data.data.name});
-    this.setState({license_no: companyData.data.data.license_no});
-    this.setState({address: companyData.data.data.address});
-    this.setState({contact_no: companyData.data.data.contact_no});
-    this.setState({email: companyData.data.data.email});
-    this.setState({description: companyData.data.data.description});
+    this.setState({ name: companyData.data.data.name });
+    this.setState({ license_no: companyData.data.data.license_no });
+    this.setState({ address: companyData.data.data.address });
+    this.setState({ contact_no: companyData.data.data.contact_no });
+    this.setState({ email: companyData.data.data.email });
+    this.setState({ description: companyData.data.data.description });
+    this.setState({ dataLoaded: true });
     // this.setState({
     //   companyDataList: companyData.data.data,
     // });
@@ -70,6 +72,16 @@ class CompanyDetailsComponent extends React.Component {
   viewCompanyDetails = (company_id) => {
     console.log(company_id);
     console.log(this.props);
+  };
+
+  addCompanyBank = () => {
+    this.props.history.push("/addCompanyBank/" + this.props.match.params.id);
+  };
+
+  editCompanyBank = (company_bank_id) => {
+    this.props.history.push(
+      "/editcompanybank/" + this.props.match.params.id + "/" + company_bank_id
+    );
   };
 
   render() {
@@ -83,6 +95,22 @@ class CompanyDetailsComponent extends React.Component {
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <div className="card">
                 <div className="header">
+                  {this.state.dataLoaded == false ? (
+                    <div className="text-center">
+                      <div class="preloader pl-size-xl">
+                        <div class="spinner-layer">
+                          <div class="circle-clipper left">
+                            <div class="circle"></div>
+                          </div>
+                          <div class="circle-clipper right">
+                            <div class="circle"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <h2>Edit Company</h2>
                 </div>
                 <div className="body">
@@ -208,7 +236,31 @@ class CompanyDetailsComponent extends React.Component {
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <div className="card">
                 <div className="header">
+                  {this.state.dataLoaded == false ? (
+                    <div className="text-center">
+                      <div class="preloader pl-size-xl">
+                        <div class="spinner-layer">
+                          <div class="circle-clipper left">
+                            <div class="circle"></div>
+                          </div>
+                          <div class="circle-clipper right">
+                            <div class="circle"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <h2>Company Bank</h2>
+                  <div className="header-dropdown m-r--5">
+                    <button
+                      className="btn btn-info"
+                      onClick={this.addCompanyBank}
+                    >
+                      Add Company
+                    </button>
+                  </div>
                 </div>
                 <div className="body table-responsive">
                   <table className="table table-hover">
@@ -216,7 +268,7 @@ class CompanyDetailsComponent extends React.Component {
                       <tr>
                         <th>#ID</th>
                         <th>Account No.</th>
-                        <th>IFSC Code</th>
+                        <th>Swift Code</th>
                         <th>Added On</th>
                         <th>Action</th>
                       </tr>
@@ -226,9 +278,15 @@ class CompanyDetailsComponent extends React.Component {
                         <tr key={company.id}>
                           <td>{company.id}</td>
                           <td>{company.bank_account_no}</td>
-                          <td>{company.ifsc_no}</td>
+                          <td>{company.swift_no}</td>
                           <td>{new Date(company.added_on).toLocaleString()}</td>
                           <td>
+                            <button
+                              className="btn btn-block btn-warning"
+                              onClick={() => this.editCompanyBank(company.id)}
+                            >
+                              EDIT
+                            </button>
                             <button className="btn btn-block btn-danger">
                               DELETE
                             </button>
