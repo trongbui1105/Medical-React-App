@@ -190,19 +190,6 @@ class MedicineAddComponent extends React.Component {
                       </div>
                     </div>
 
-                    <label htmlFor="expire_date">Expire Date</label>
-                    <div className="form-group">
-                      <div className="form-line">
-                        <input
-                          type="date"
-                          id="expire_date"
-                          name="expire_date"
-                          className="form-control"
-                          placeholder="Enter Expire Date"
-                        />
-                      </div>
-                    </div>
-
                     <label htmlFor="mfg_date">Mfg Date</label>
                     <div className="form-group">
                       <div className="form-line">
@@ -212,6 +199,19 @@ class MedicineAddComponent extends React.Component {
                           name="mfg_date"
                           className="form-control"
                           placeholder="Enter Mfg Date"
+                        />
+                      </div>
+                    </div>
+
+                    <label htmlFor="expire_date">Expire Date</label>
+                    <div className="form-group">
+                      <div className="form-line">
+                        <input
+                          type="date"
+                          id="expire_date"
+                          name="expire_date"
+                          className="form-control"
+                          placeholder="Enter Expire Date"
                         />
                       </div>
                     </div>

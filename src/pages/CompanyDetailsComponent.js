@@ -1,6 +1,6 @@
 import React from "react";
 import APIHandler from "../utils/APIHandler";
-
+const { default: Axios } = require("axios");
 
 class CompanyDetailsComponent extends React.Component {
   constructor(props) {
@@ -64,9 +64,6 @@ class CompanyDetailsComponent extends React.Component {
     this.setState({ email: companyData.data.data.email });
     this.setState({ description: companyData.data.data.description });
     this.setState({ dataLoaded: true });
-    // this.setState({
-    //   companyDataList: companyData.data.data,
-    // });
   }
 
   viewCompanyDetails = (company_id) => {
@@ -82,6 +79,15 @@ class CompanyDetailsComponent extends React.Component {
     this.props.history.push(
       "/editcompanybank/" + this.props.match.params.id + "/" + company_bank_id
     );
+  };
+
+  deleteCompanyBank = (company_bank_id) => {
+    var apiHandler = new APIHandler();
+    var response = apiHandler.deleteCompanyBankData(
+      company_bank_id
+    );
+    console.log(response);
+    this.fetchCompanyData();
   };
 
   render() {
@@ -287,7 +293,10 @@ class CompanyDetailsComponent extends React.Component {
                             >
                               EDIT
                             </button>
-                            <button className="btn btn-block btn-danger">
+                            <button
+                              className="btn btn-block btn-danger"
+                              onClick={() => this.deleteCompanyBank(company.id)}
+                            >
                               DELETE
                             </button>
                           </td>

@@ -143,6 +143,22 @@ class APIHandler {
     return response;
   }
 
+  async deleteCompanyBankData(company_bank_id) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.delete(
+      Config.companyBankApiUrl + "" + company_bank_id + "/",
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
   async fetchCompanyBankDetails(id) {
     await this.checkLogin();
 
