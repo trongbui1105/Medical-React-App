@@ -1,5 +1,6 @@
 import React from "react";
-import usericon from "adminbsb-materialdesign/images/user.png";
+import usericon from "../image/Avatar.jpg";
+// import usericon from "adminbsb-materialdesign/images/user.png";
 import Config from "../utils/Config";
 import { Link } from "react-router-dom";
 
@@ -61,9 +62,9 @@ class Sidebar extends React.Component {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                John Doe
+                Trong Bui
               </div>
-              <div className="email">john.doe@example.com</div>
+              <div className="email">bqt@gmail.com</div>
               <div className={this.state.defaultClass}>
                 <i
                   className="material-icons"
@@ -156,9 +157,6 @@ class Sidebar extends React.Component {
             <div className="copyright">
               © 2021 - 2022{" "}
               <a href="#">BQT</a>.
-            </div>
-            <div className="version">
-              <b>Version: </b> 1.0.5
             </div>
           </div>
         </aside>

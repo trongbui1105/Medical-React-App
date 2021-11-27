@@ -1,6 +1,6 @@
 import React from "react";
 import APIHandler from "../utils/APIHandler";
-import AuthHandler from "../utils/AuthHandler";
+
 
 class CompanyDetailsComponent extends React.Component {
   constructor(props) {
@@ -95,7 +95,7 @@ class CompanyDetailsComponent extends React.Component {
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <div className="card">
                 <div className="header">
-                  {this.state.dataLoaded == false ? (
+                  {this.state.dataLoaded === false ? (
                     <div className="text-center">
                       <div class="preloader pl-size-xl">
                         <div class="spinner-layer">
@@ -236,7 +236,7 @@ class CompanyDetailsComponent extends React.Component {
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <div className="card">
                 <div className="header">
-                  {this.state.dataLoaded == false ? (
+                  {this.state.dataLoaded === false ? (
                     <div className="text-center">
                       <div class="preloader pl-size-xl">
                         <div class="spinner-layer">

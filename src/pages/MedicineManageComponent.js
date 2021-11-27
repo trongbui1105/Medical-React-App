@@ -1,7 +1,8 @@
 import React from "react";
 import APIHandler from "../utils/APIHandler";
 
-class MedicineAddComponent extends React.Component {
+
+class MedicineManageComponent extends React.Component {
   constructor(props) {
     super(props);
     this.formSubmit = this.formSubmit.bind(this);
@@ -13,16 +14,31 @@ class MedicineAddComponent extends React.Component {
     btnMessage: 0,
     sendData: false,
     companylist: [],
-    medicineDetails: [
-      { salt_name: "", salt_qty: "", salt_qty_type: "", description: "" },
-    ],
+    medicineDetails: [],
+    medicineDataList: [],
+    dataLoaded: false,
+    name: "",
+    medical_typ: "",
+    buy_price: "",
+    sell_price: "",
+    gst: "",
+    batch_no: "",
+    shelf_no: "",
+    expire_date: "",
+    mfg_date: "",
+    company_id: "",
+    description1: "",
+    in_stock_total: "",
+    qty_in_strip: "",
+    total_salt_list: 0,
+    medicine_id: 0,
   };
 
   async formSubmit(event) {
     event.preventDefault();
     this.setState({ btnMessage: 1 });
     var apiHandler = new APIHandler();
-    var response = await apiHandler.saveMedicineData(
+    var response = await apiHandler.editMedicineData(
       event.target.name.value,
       event.target.medical_typ.value,
       event.target.buy_price.value,
@@ -36,7 +52,8 @@ class MedicineAddComponent extends React.Component {
       event.target.description1.value,
       event.target.in_stock_total.value,
       event.target.qty_in_strip.value,
-      this.state.medicineDetails
+      this.state.medicineDetails,
+      this.state.medicine_id
     );
 
     console.log(response);
@@ -47,19 +64,24 @@ class MedicineAddComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.loadCompany();
+    this.loadInitialData();
   }
 
-  async loadCompany() {
+  async loadInitialData() {
     var apiHandler = new APIHandler();
     var companyData = await apiHandler.fetchCompanyOnly();
+    var medicineData = await apiHandler.fetchAllMedicine();
     this.setState({
       companylist: companyData.data,
     });
+    this.setState({
+      medicineDataList: medicineData.data.data,
+    });
+    this.setState({ dataLoaded: true });
   }
 
   removeItems = () => {
-    if (this.state.medicineDetails.length !== 1) {
+    if (this.state.medicineDetails.length !== this.state.total_salt_list) {
       this.state.medicineDetails.pop(this.state.medicineDetails.length - 1);
     }
     this.setState({});
@@ -71,9 +93,48 @@ class MedicineAddComponent extends React.Component {
       salt_qty: "",
       salt_qty_type: "",
       description: "",
+      id: 0,
     };
     this.state.medicineDetails.push(item);
     this.setState({});
+  };
+
+  viewMedicineDetails = (index) => {
+    this.setState({ medicine_id: this.state.medicineDataList[index].id });
+    this.setState({ name: this.state.medicineDataList[index].name });
+    this.setState({
+      medical_typ: this.state.medicineDataList[index].medical_typ,
+    });
+    this.setState({ buy_price: this.state.medicineDataList[index].buy_price });
+    this.setState({
+      sell_price: this.state.medicineDataList[index].sell_price,
+    });
+    this.setState({ gst: this.state.medicineDataList[index].gst });
+    this.setState({ batch_no: this.state.medicineDataList[index].batch_no });
+    this.setState({ shelf_no: this.state.medicineDataList[index].shelf_no });
+    this.setState({
+      expire_date: this.state.medicineDataList[index].expire_date,
+    });
+    this.setState({ mfg_date: this.state.medicineDataList[index].mfg_date });
+    this.setState({
+      company_id: this.state.medicineDataList[index].company_id,
+    });
+    this.setState({
+      description1: this.state.medicineDataList[index].description,
+    });
+    this.setState({
+      in_stock_total: this.state.medicineDataList[index].in_stock_total,
+    });
+    this.setState({
+      qty_in_strip: this.state.medicineDataList[index].qty_in_strip,
+    });
+    this.setState({
+      total_salt_list:
+        this.state.medicineDataList[index].medicine_details.length,
+    });
+    this.setState({
+      medicineDetails: this.state.medicineDataList[index].medicine_details,
+    });
   };
 
   handleInput = (event) => {
@@ -89,13 +150,89 @@ class MedicineAddComponent extends React.Component {
       <section className="content">
         <div className="container-fluid">
           <div className="block-header">
-            <h2>ADD Medicine</h2>
+            <h2>MANAGE Medicine</h2>
           </div>
           <div className="row clearfix">
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <div className="card">
                 <div className="header">
-                  <h2>Add Medicine</h2>
+                  {this.state.dataLoaded === false ? (
+                    <div className="text-center">
+                      <div class="preloader pl-size-xl">
+                        <div class="spinner-layer">
+                          <div class="circle-clipper left">
+                            <div class="circle"></div>
+                          </div>
+                          <div class="circle-clipper right">
+                            <div class="circle"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  <h2>All Medicine</h2>
+                </div>
+                <div className="body table-responsive">
+                  <table className="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>#ID</th>
+                        <th>NAME</th>
+                        <th>Medical Type</th>
+                        <th>Buy Price</th>
+                        <th>Sell Price</th>
+                        <th>Batch No.</th>
+                        <th>Shelf No.</th>
+                        <th>Expire Date</th>
+                        <th>Mfg Date</th>
+                        <th>In Stock</th>
+                        <th>Quantity In Strip</th>
+                        <th>Company</th>
+                        <th>Added On</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.medicineDataList.map((medicine, index) => (
+                        <tr key={medicine.id}>
+                          <td>{medicine.id}</td>
+                          <td>{medicine.name}</td>
+                          <td>{medicine.medical_typ}</td>
+                          <td>{medicine.buy_price}</td>
+                          <td>{medicine.sell_price}</td>
+                          <td>{medicine.batch_no}</td>
+                          <td>{medicine.shelf_no}</td>
+                          <td>{medicine.expire_date}</td>
+                          <td>{medicine.mfg_date}</td>
+                          <td>{medicine.in_stock_total}</td>
+                          <td>{medicine.qty_in_strip}</td>
+                          <td>{medicine.company.name}</td>
+                          <td>
+                            {new Date(medicine.added_on).toLocaleString()}
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-block btn-warning"
+                              onClick={() => this.viewMedicineDetails(index)}
+                            >
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row clearfix">
+            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div className="card">
+                <div className="header">
+                  <h2>Manage Medicine</h2>
                 </div>
                 <div className="body">
                   <form onSubmit={this.formSubmit}>
@@ -108,6 +245,7 @@ class MedicineAddComponent extends React.Component {
                           name="name"
                           className="form-control"
                           placeholder="Enter Name"
+                          defaultValue={this.state.name}
                         />
                       </div>
                     </div>
@@ -121,6 +259,7 @@ class MedicineAddComponent extends React.Component {
                           name="medical_typ"
                           className="form-control"
                           placeholder="Enter Medicine Type"
+                          defaultValue={this.state.medical_typ}
                         />
                       </div>
                     </div>
@@ -134,6 +273,7 @@ class MedicineAddComponent extends React.Component {
                           name="buy_price"
                           className="form-control"
                           placeholder="Enter Buy Price"
+                          defaultValue={this.state.buy_price}
                         />
                       </div>
                     </div>
@@ -147,6 +287,7 @@ class MedicineAddComponent extends React.Component {
                           name="sell_price"
                           className="form-control"
                           placeholder="Enter Sell Price"
+                          defaultValue={this.state.sell_price}
                         />
                       </div>
                     </div>
@@ -160,6 +301,7 @@ class MedicineAddComponent extends React.Component {
                           name="gst"
                           className="form-control"
                           placeholder="Enter GST"
+                          defaultValue={this.state.gst}
                         />
                       </div>
                     </div>
@@ -173,6 +315,7 @@ class MedicineAddComponent extends React.Component {
                           name="batch_no"
                           className="form-control"
                           placeholder="Enter Batch No"
+                          defaultValue={this.state.batch_no}
                         />
                       </div>
                     </div>
@@ -186,6 +329,7 @@ class MedicineAddComponent extends React.Component {
                           name="shelf_no"
                           className="form-control"
                           placeholder="Enter Shelf No"
+                          defaultValue={this.state.shelf_no}
                         />
                       </div>
                     </div>
@@ -199,6 +343,7 @@ class MedicineAddComponent extends React.Component {
                           name="expire_date"
                           className="form-control"
                           placeholder="Enter Expire Date"
+                          defaultValue={this.state.expire_date}
                         />
                       </div>
                     </div>
@@ -212,6 +357,7 @@ class MedicineAddComponent extends React.Component {
                           name="mfg_date"
                           className="form-control"
                           placeholder="Enter Mfg Date"
+                          defaultValue={this.state.mfg_date}
                         />
                       </div>
                     </div>
@@ -225,6 +371,7 @@ class MedicineAddComponent extends React.Component {
                           name="description1"
                           className="form-control"
                           placeholder="Enter Description"
+                          defaultValue={this.state.description1}
                         />
                       </div>
                     </div>
@@ -238,6 +385,7 @@ class MedicineAddComponent extends React.Component {
                           name="in_stock_total"
                           className="form-control"
                           placeholder="Enter In Stock"
+                          defaultValue={this.state.in_stock_total}
                         />
                       </div>
                     </div>
@@ -251,6 +399,7 @@ class MedicineAddComponent extends React.Component {
                           name="qty_in_strip"
                           className="form-control"
                           placeholder="Enter Quantity In Strip"
+                          value={this.state.qty_in_strip}
                         />
                       </div>
                     </div>
@@ -258,18 +407,23 @@ class MedicineAddComponent extends React.Component {
                     <label htmlFor="company">Company</label>
                     <div className="form-group">
                       <select
-                        className="form-control"
+                        className="form-control show-tick"
                         name="company_id"
                         id="company_id"
                       >
                         {this.state.companylist.map((item) => (
-                          <option key={item.id} value={item.id}>
+                          <option
+                            key={item.id}
+                            value={item.id}
+                            selected={
+                              item.id === this.state.company_id ? true : false
+                            }
+                          >
                             {item.name}
                           </option>
                         ))}
                       </select>
                     </div>
-
                     <div className="form-group">
                       <div className="col-lg-6">
                         <button
@@ -283,8 +437,8 @@ class MedicineAddComponent extends React.Component {
                       <div className="col-lg-6">
                         <button
                           className="btn btn-block btn-danger"
-                          onClick={this.removeItems}
                           type="button"
+                          onClick={this.removeItems}
                         >
                           Remove Details
                         </button>
@@ -303,6 +457,7 @@ class MedicineAddComponent extends React.Component {
                               placeholder="Enter Salt Name"
                               onChange={this.handleInput}
                               data-index={index}
+                              defaultValue={item.salt_name}
                             />
                           </div>
                         </div>
@@ -317,6 +472,7 @@ class MedicineAddComponent extends React.Component {
                               placeholder="Enter Salt Quantity"
                               onChange={this.handleInput}
                               data-index={index}
+                              defaultValue={item.salt_qty}
                             />
                           </div>
                         </div>
@@ -331,6 +487,7 @@ class MedicineAddComponent extends React.Component {
                               placeholder="Enter Salt Quantity Type"
                               onChange={this.handleInput}
                               data-index={index}
+                              defaultValue={item.salt_qty_type}
                             />
                           </div>
                         </div>
@@ -345,6 +502,7 @@ class MedicineAddComponent extends React.Component {
                               placeholder="Enter Description"
                               onChange={this.handleInput}
                               data-index={index}
+                              defaultValue={item.description}
                             />
                           </div>
                         </div>
@@ -357,8 +515,8 @@ class MedicineAddComponent extends React.Component {
                       disabled={this.state.btnMessage === 0 ? false : true}
                     >
                       {this.state.btnMessage === 0
-                        ? "Add Medicine"
-                        : "Adding Medicine Please Wait..."}
+                        ? "Edit Medicine"
+                        : "Updating Medicine Please Wait..."}
                     </button>
                     <br />
                     {this.state.errorRes === false &&
@@ -389,4 +547,4 @@ class MedicineAddComponent extends React.Component {
   }
 }
 
-export default MedicineAddComponent;
+export default MedicineManageComponent;

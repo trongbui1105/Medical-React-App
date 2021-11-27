@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import APIHandler from "../utils/APIHandler";
-import AuthHandler from "../utils/AuthHandler";
+
 
 class CompanyEditBankComponent extends React.Component {
   constructor(props) {

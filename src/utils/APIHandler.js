@@ -66,6 +66,18 @@ class APIHandler {
     return response;
   }
 
+  async fetchAllCustomerRequest() {
+    await this.checkLogin();
+
+    var response = await Axios.get(Config.customerRequestApiUrl, {
+      headers: {
+        Authorization: "Bearer " + AuthHandler.getLoginToken(),
+      },
+    });
+
+    return response;
+  }
+
   async fetchCompanyDetails(id) {
     await this.checkLogin();
 
@@ -211,7 +223,7 @@ class APIHandler {
         description: description,
         in_stock_total: in_stock_total,
         qty_in_strip: qty_in_strip,
-        medicine_details: medicineDetails
+        medicine_details: medicineDetails,
       },
       {
         headers: {
@@ -219,6 +231,332 @@ class APIHandler {
         },
       }
     );
+
+    return response;
+  }
+
+  async fetchAllMedicine() {
+    await this.checkLogin();
+
+    var response = await Axios.get(Config.medicineApiUrl, {
+      headers: {
+        Authorization: "Bearer " + AuthHandler.getLoginToken(),
+      },
+    });
+
+    return response;
+  }
+
+  async editMedicineData(
+    name,
+    medical_typ,
+    buy_price,
+    sell_price,
+    gst,
+    batch_no,
+    shelf_no,
+    expire_date,
+    mfg_date,
+    company_id,
+    description,
+    in_stock_total,
+    qty_in_strip,
+    medicineDetails,
+    id
+  ) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.put(
+      Config.medicineApiUrl + "" + id + "/",
+      {
+        name: name,
+        medical_typ: medical_typ,
+        buy_price: buy_price,
+        sell_price: sell_price,
+        gst: gst,
+        batch_no: batch_no,
+        shelf_no: shelf_no,
+        expire_date: expire_date,
+        mfg_date: mfg_date,
+        company_id: company_id,
+        description: description,
+        in_stock_total: in_stock_total,
+        qty_in_strip: qty_in_strip,
+        medicine_details: medicineDetails,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
+  async fetchAllCompanyAccount() {
+    await this.checkLogin();
+
+    var response = await Axios.get(Config.companyAccountApiUrl, {
+      headers: {
+        Authorization: "Bearer " + AuthHandler.getLoginToken(),
+      },
+    });
+
+    return response;
+  }
+
+  async saveCompanyTransactionData(
+    company_id,
+    transaction_type,
+    transaction_amt,
+    transaction_date,
+    payment_mode
+  ) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.post(
+      Config.companyAccountApiUrl,
+      {
+        company_id: company_id,
+        transaction_type: transaction_type,
+        transaction_amt: transaction_amt,
+        transaction_date: transaction_date,
+        payment_mode: payment_mode,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
+  async fetchEmployee() {
+    await this.checkLogin();
+
+    var response = await Axios.get(Config.employeeApiUrl, {
+      headers: {
+        Authorization: "Bearer " + AuthHandler.getLoginToken(),
+      },
+    });
+
+    return response;
+  }
+
+  async saveEmployeeData(name, joining_date, phone, address) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.post(
+      Config.employeeApiUrl,
+      {
+        name: name,
+        joining_date: joining_date,
+        phone: phone,
+        address: address,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
+  async fetchEmployeeByID(id) {
+    await this.checkLogin();
+
+    var response = await Axios.get(Config.employeeApiUrl + "" + id + "/", {
+      headers: {
+        Authorization: "Bearer " + AuthHandler.getLoginToken(),
+      },
+    });
+
+    return response;
+  }
+
+  async editEmployeeData(name, joining_date, phone, address, id) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.put(
+      Config.employeeApiUrl + "" + id + "/",
+      {
+        name: name,
+        joining_date: joining_date,
+        phone: phone,
+        address: address,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
+  async fetchSalaryEmployee(id) {
+    await this.checkLogin();
+
+    var response = await Axios.get(Config.employeeSalaryByIDApiUrl + "" + id, {
+      headers: {
+        Authorization: "Bearer " + AuthHandler.getLoginToken(),
+      },
+    });
+
+    return response;
+  }
+
+  async addEmployeeSalaryData(salary_date, salary_amount, employee_id) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.post(
+      Config.employeeSalaryApiUrl,
+      {
+        salary_date: salary_date,
+        salary_amount: salary_amount,
+        employee_id: employee_id,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
+  async addEmployeeBankData(bank_account_no, swift_no, employee_id) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.post(
+      Config.employeeBankApiUrl,
+      {
+        bank_account_no: bank_account_no,
+        swift_no: swift_no,
+        employee_id: employee_id,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
+  async fetchBankEmployee(id) {
+    await this.checkLogin();
+
+    var response = await Axios.get(Config.employeeBankByIDApiUrl + "" + id, {
+      headers: {
+        Authorization: "Bearer " + AuthHandler.getLoginToken(),
+      },
+    });
+
+    return response;
+  }
+
+  async fetchMedicineByName(name) {
+    if (name !== "") {
+      await this.checkLogin();
+
+      var response = await Axios.get(Config.medicineNameApiUrl + "" + name, {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      });
+
+      return response;
+    } else {
+      return { data: [] };
+    }
+  }
+
+  async generateBill(name, address, phone, medicineDetails) {
+    await this.checkLogin();
+
+    var response = await Axios.post(
+      Config.generateBillApiUrl,
+      {
+        name: name,
+        address: address,
+        contact: phone,
+        medicine_details: medicineDetails,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
+  async saveCustomerRequestData(name, phone, medicine_details) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.post(
+      Config.customerRequestApiUrl,
+      {
+        customer_name: name,
+        phone: phone,
+        medicine_details: medicine_details,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
+  async updateCustomerRequest(customer_id, customer_name, phone, medicine_details) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.put(
+      Config.customerRequestApiUrl + "" + customer_id + "/",
+      {
+        customer_name: customer_name,
+        phone: phone,
+        medicine_details: medicine_details,
+        status: 1
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+    return response;
+  }
+
+  async fetchHomePage() {
+    await this.checkLogin();
+
+    var response = await Axios.get(Config.homeApiUrl, {
+      headers: {
+        Authorization: "Bearer " + AuthHandler.getLoginToken(),
+      },
+    });
 
     return response;
   }
