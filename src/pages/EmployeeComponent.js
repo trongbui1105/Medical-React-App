@@ -1,7 +1,6 @@
 import React from "react";
 import APIHandler from "../utils/APIHandler";
 
-
 class EmployeeComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -60,6 +59,14 @@ class EmployeeComponent extends React.Component {
 
   showEmpDetails = (eid) => {
     this.props.history.push("/employeeDetails/" + eid);
+  };
+
+  async deleteEmployee(eid) {
+    var apiHandler = new APIHandler();
+    var response = await apiHandler.deleteEmployee(eid);
+    console.log(response);
+    console.log(eid);
+    this.updateDataAgain();
   };
 
   render() {
@@ -219,10 +226,18 @@ class EmployeeComponent extends React.Component {
                           </td>
                           <td>
                             <button
-                              className="btn btn-primary"
+                              className="btn btn-block btn-primary"
                               onClick={() => this.showEmpDetails(employee.id)}
                             >
                               View
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-block btn-danger"
+                              onClick={() => this.deleteEmployee(employee.id)}
+                            >
+                              Delete
                             </button>
                           </td>
                         </tr>

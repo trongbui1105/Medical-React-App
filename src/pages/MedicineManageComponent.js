@@ -1,7 +1,6 @@
 import React from "react";
 import APIHandler from "../utils/APIHandler";
 
-
 class MedicineManageComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -145,6 +144,13 @@ class MedicineManageComponent extends React.Component {
     this.setState({});
   };
 
+  deleteMedicine = (medicine_id) => {
+    var apiHandler = new APIHandler();
+    var response = apiHandler.deleteMedicine(medicine_id);
+    console.log(response);
+    this.loadInitialData();
+  };
+
   render() {
     return (
       <section className="content">
@@ -218,6 +224,14 @@ class MedicineManageComponent extends React.Component {
                               onClick={() => this.viewMedicineDetails(index)}
                             >
                               View
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-block btn-danger"
+                              onClick={() => this.deleteMedicine(medicine.id)}
+                            >
+                              Delete
                             </button>
                           </td>
                         </tr>

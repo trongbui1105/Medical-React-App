@@ -159,6 +159,38 @@ class APIHandler {
     return response;
   }
 
+  async deleteMedicine(medicine_id) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.delete(
+      Config.medicineApiUrl + "" + medicine_id + "/",
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
+  async deleteEmployee(emp_id) {
+    await this.checkLogin();
+    // Wait until token get updated
+
+    var response = await Axios.delete(
+      Config.employeeApiUrl + "" + emp_id + "/",
+      {
+        headers: {
+          Authorization: "Bearer " + AuthHandler.getLoginToken(),
+        },
+      }
+    );
+
+    return response;
+  }
+
   async fetchCompanyBankDetails(id) {
     await this.checkLogin();
 
